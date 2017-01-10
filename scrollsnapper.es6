@@ -32,7 +32,7 @@ document.registerElement('felds-scrollsnapper', class extends HTMLElement {
       const el = children.item(i)
       const top = el.offsetTop - scrollTop
 
-      if (top > 0 && top <= treshold) {
+      if (top > 0 && top < treshold) {
         this._animate(this.scrollTop, el.offsetTop)
         break
       }

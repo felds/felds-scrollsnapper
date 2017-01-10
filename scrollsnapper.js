@@ -52,7 +52,7 @@ document.registerElement('felds-scrollsnapper', function (_HTMLElement) {
         var el = children.item(i);
         var top = el.offsetTop - scrollTop;
 
-        if (top > 0 && top <= treshold) {
+        if (top > 0 && top < treshold) {
           this._animate(this.scrollTop, el.offsetTop);
           break;
         }
