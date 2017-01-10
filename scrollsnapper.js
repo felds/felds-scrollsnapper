@@ -43,17 +43,18 @@ document.registerElement('felds-scrollsnapper', function (_HTMLElement) {
   }, {
     key: '_run',
     value: function _run() {
-      var height = this.offsetHeight;
+      var height = this.innerHeight;
       var scrollTop = this.scrollTop;
       var treshold = Math.floor(height * this.treshold);
       var children = this.children;
+      var contentTop = this.contentTop;
 
       for (var i = 0; i < children.length; i++) {
         var el = children.item(i);
-        var top = el.offsetTop - scrollTop;
+        var top = el.offsetTop - contentTop - this.scrollTop;
 
         if (top > 0 && top < treshold) {
-          this._animate(this.scrollTop, el.offsetTop);
+          this._animate(this.scrollTop, el.offsetTop - this.contentTop);
           break;
         }
       }
@@ -114,6 +115,20 @@ document.registerElement('felds-scrollsnapper', function (_HTMLElement) {
     },
     set: function set(val) {
       this.setAttribute('animation-time', parseInt(val));
+    }
+  }, {
+    key: 'innerHeight',
+    get: function get() {
+      var computedStyles = window.getComputedStyle(this, null);
+
+      return this.offsetHeight - parseInt(computedStyles.paddingTop) - parseInt(computedStyles.borderTopWidth) - parseInt(computedStyles.paddingBottom) - parseInt(computedStyles.borderBottomWidth);
+    }
+  }, {
+    key: 'contentTop',
+    get: function get() {
+      var computedStyles = window.getComputedStyle(this, null);
+
+      return this.offsetTop + parseInt(computedStyles.paddingTop) + parseInt(computedStyles.borderTopWidth);
     }
   }]);
 

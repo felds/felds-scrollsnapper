@@ -23,17 +23,18 @@ document.registerElement('felds-scrollsnapper', class extends HTMLElement {
 
 
   _run() {
-    const height = this.offsetHeight
+    const height = this.innerHeight
     const scrollTop = this.scrollTop
     const treshold = Math.floor(height * this.treshold)
     const children = this.children
+    const contentTop =  this.contentTop
 
     for (let i = 0; i < children.length; i++) {
       const el = children.item(i)
-      const top = el.offsetTop - scrollTop
+      const top = el.offsetTop - contentTop - this.scrollTop
 
       if (top > 0 && top < treshold) {
-        this._animate(this.scrollTop, el.offsetTop)
+        this._animate(this.scrollTop, el.offsetTop - this.contentTop)
         break
       }
     }
@@ -86,5 +87,21 @@ document.registerElement('felds-scrollsnapper', class extends HTMLElement {
   }
   set animationTime(val) {
     this.setAttribute('animation-time', parseInt(val))
+  }
+  get innerHeight() {
+    const computedStyles = window.getComputedStyle(this, null)
+
+    return this.offsetHeight
+      - parseInt(computedStyles.paddingTop)
+      - parseInt(computedStyles.borderTopWidth)
+      - parseInt(computedStyles.paddingBottom)
+      - parseInt(computedStyles.borderBottomWidth)
+  }
+  get contentTop() {
+    const computedStyles = window.getComputedStyle(this, null)
+
+    return this.offsetTop
+      + parseInt(computedStyles.paddingTop)
+      + parseInt(computedStyles.borderTopWidth)
   }
 })
